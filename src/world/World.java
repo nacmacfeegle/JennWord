@@ -1,23 +1,20 @@
 package world;
 
-import world.domain.Individual;
-import world.domain.Domain;
-import world.Population;
-import world.Utils;
-import world.domain.biomino.BiominoDomain;
-//import world.domain.longlife.LongLifeDomain;
-//import world.domain.your.YourDomain;  // <-- import your domain here
-
-import search.Search;
-import search.SearchMC;
-import search.SearchGA;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import search.Search;
+import search.SearchGA;
+import search.SearchMC;
+import world.domain.Domain;
+import world.domain.Individual;
+import world.domain.longlife.LongLifeDomain;
+//import world.domain.longlife.LongLifeDomain;
+//import world.domain.your.YourDomain;  // <-- import your domain here
 
 //-----------------------------------------------------------------------------
 
@@ -28,8 +25,8 @@ import java.util.List;
 public class World
 {	
 	/** Current domain. */
-	protected Domain domain = new BiominoDomain();
-	//protected Domain domain = new LongLifeDomain();
+	//protected Domain domain = new BiominoDomain();
+	protected Domain domain = new LongLifeDomain();
 	//protected Domain domain = new YourDomain();  // <-- construct your domain here
 	
 	/** Master population. */
