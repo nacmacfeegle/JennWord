@@ -1,0 +1,50 @@
+<cmdline>	::= -c <CoxeterMatrix> <StabilizingGenerators> <Edges> <Faces> <VertexWeights>
+<CoxeterMatrix>	::= <Torus> | <FreePolyhedra> | <FreePolytope>
+<Torus>		::= <Int_2_12> 2 2 2 2 <Int_2_12>
+<FreePolyhedra>	::= 3 3 2 2 2 2
+		| 3 4 2 2 2 2
+		| 3 5 2 2 2 2
+		| 4 3 2 2 2 2
+		| 5 3 2 2 2 2
+		| 3 2 3 2 2 2
+		| 3 2 4 2 2 2
+		| 3 2 5 2 2 2
+		| 4 2 3 2 2 2
+		| 5 2 3 2 2 2
+		| 2 2 2 2 3 3
+		| 2 2 2 2 3 4
+		| 2 2 2 2 3 5
+		| 2 2 2 2 4 3
+		| 2 2 2 2 5 3
+<FreePolytope>	::= 3 3 3 2 2 2
+		| 3 3 2 2 3 2
+		| 3 3 2 2 4 2
+		| 3 3 2 2 5 2
+		| 3 4 2 2 3 2
+		| 3 5 2 2 3 2
+		| 4 3 2 2 3 2
+		| 3 2 3 2 2 3
+		| 3 2 3 2 2 4
+		| 3 2 3 2 2 5
+		| 3 2 4 2 2 3
+		| 4 2 3 2 2 3
+		| 5 2 3 2 2 3
+		| 2 2 3 2 3 3
+<StabilizingGenerators> ::= | -v <Comb0123>
+<Edges> ::= | -e <EdgeSet>
+<EdgeSet> ::= <Comb0123> | <EdgeSet> <Comb0123>
+<Faces> ::= | -f <FaceSet>
+<FaceSet> ::= <FourInt_0_3> | <FaceSet> <FourInt_0_3>
+<FourInt_0_3> ::= <Int_0_3>
+	|  <Int_0_3><Int_0_3>
+	|  <Int_0_3><Int_0_3><Int_0_3>
+	|  <Int_0_3><Int_0_3><Int_0_3><Int_0_3>
+<VertexWeights> ::= | -w <Int_1_12> <Int_1_12> <Int_1_12> <Int_1_12>
+<Int_0_3> ::= 0 | 1 | 2 | 3
+<Int_1_12> ::= 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12
+<Int_2_12> ::= 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12
+<Int_3_12> ::= 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12
+<Comb0123> ::= 0 | 1 | 2 | 3
+	| 01 | 02 | 03 | 12 | 13 | 23
+	| 012 | 013 | 023 | 123 | 0123
+
