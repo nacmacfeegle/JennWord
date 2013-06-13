@@ -1,5 +1,11 @@
 package world.domain.jenn;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.DefaultExecutor;
+
 import world.domain.Domain;
 import world.domain.Individual;
 
@@ -39,8 +45,33 @@ public class Jenn extends Individual {
 		// wait for file to exist at the location (use timeout and default to score 0 in that case)
 		// once file available, read fitness score and return
 		
+		String command = "/Users/danc/dev/code/research/JennWord/GEMapJenn/jenn";
+		CommandLine commandLine = CommandLine.parse(command);
+		commandLine.addArgument(convertGenotype());
+		DefaultExecutor executor = new DefaultExecutor();
+		executor.setWorkingDirectory(new File("/Users/danc/dev/code/research/JennWord/GEMapJenn"));
+		try {
+			int exitValue = executor.execute(commandLine);
+		} catch (IOException ioe) {
+			quality = 0;
+		} 
+		
 	}
-	
+
+	/**
+	 * Converts the genotype to a Jenn-friendly input
+	 * @return a space-separated 64-bit binary string 
+	 */
+	private String convertGenotype() {
+		String tmp = Long.toBinaryString(genotype);
+		StringBuffer sb = new StringBuffer();
+		for (int i=0; i<tmp.length(); i++) {
+			sb.append(tmp.charAt(i));
+			sb.append(" ");
+		}
+		return sb.toString();
+	}
+
 	//-------------------------------------------------------------------------
 
 	/**
