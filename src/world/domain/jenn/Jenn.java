@@ -12,6 +12,9 @@ import world.domain.Individual;
 //-----------------------------------------------------------------------------
 
 public class Jenn extends Individual {	
+	
+	public static final String JENN_DIR = File.separator + "GEMapJenn";
+	
 	/**
 	 * Constructor.
 	 * @param domain Domain associated with this individual.
@@ -45,11 +48,12 @@ public class Jenn extends Individual {
 		// wait for file to exist at the location (use timeout and default to score 0 in that case)
 		// once file available, read fitness score and return
 		
-		String command = "/Users/danc/dev/code/research/JennWord/GEMapJenn/jenn";
+		DefaultExecutor executor = new DefaultExecutor();
+		String workingDir = executor.getWorkingDirectory().getAbsolutePath() + JENN_DIR;
+		String command = workingDir + File.separator + "jenn";
 		CommandLine commandLine = CommandLine.parse(command);
 		commandLine.addArgument(convertGenotype());
-		DefaultExecutor executor = new DefaultExecutor();
-		executor.setWorkingDirectory(new File("/Users/danc/dev/code/research/JennWord/GEMapJenn"));
+		executor.setWorkingDirectory(new File(workingDir));
 		try {
 			int exitValue = executor.execute(commandLine);
 		} catch (IOException ioe) {
