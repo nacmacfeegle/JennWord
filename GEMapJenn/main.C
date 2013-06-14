@@ -524,9 +524,6 @@ int main(int argc,char **argv)
 {
     Logging::title("Jenn. Copyright 2001-2007 Fritz Obermeyer.");
     // Miguel ->
-    global_argc = &argc;
-    global_argv = argv;
-
     GEMap mapper;
     mapper.extractParams(argc, argv);
     // Fitness file;
@@ -538,34 +535,35 @@ int main(int argc,char **argv)
         exit(0);
     }
     std::vector<size_t>genotype;
+    /*
     // If using 64 bits as arguments:
     genotype.resize(16, 0);
     for(int i = 1; i < argc; i++){
         unsigned int v = atoi(argv[i]);
         genotype[(i - 1) / 4] += (v << (3 - (i - 1) % 4));
     }
-    /*
+    */
     // If using long int as argument:
     genotype.resize(16, 0);
-    long unsigned int longIntArg = atol(argv[1]);
+    long unsigned int longIntArg = strtoul(argv[1], NULL, 0);
+    std::cout << "Argument:  " << longIntArg << "\n";
     int sizeOfLong = sizeof(long unsigned int) * CHAR_BIT;
+    std::cout << "Binary  :  ";
     for(int i = 0; i < sizeOfLong; i++){
-        unsigned int bit = longIntArg >> i & 1;
-        std::cout << " " << bit;
-        //genotype[(i - 1) / 4] += (v << (3 - (i - 1) % 4));
+        unsigned int bit = (longIntArg >> (sizeOfLong - i - 1)) & 1;
+        std::cout << bit;
+        genotype[i / 4] += (bit << (3 - i % 4));
     }
     std::cout << "\n";
-    exit(0);
-    */
-    std::cout << "Genotype:";
-    for(int i = 1; i < genotype.size(); i++){
+    std::cout << "Genotype: ";
+    for(int i = 0; i < genotype.size(); i++){
         std::cout << " " << genotype[i];
     }
     std::cout << "\n";
     std::string phenotype;
     size_t effectiveSize;
     char valid = mapper.mapGE(genotype, phenotype, effectiveSize);
-    std::cout << "Phenotype: " << phenotype << "\n";
+    std::cout << "Phenotype: '" << phenotype << "'\n";
     if(!valid){
         // Save a 0.0 fitness onto the file, to signal non-mapping;
         outF << "0.0\n";
@@ -578,15 +576,15 @@ int main(int argc,char **argv)
     outF << "0.5\n";
     outF.close();
     phenotype += "  ";
-    // Argv does not require resizing (good thing, since that isn't working):
-    // with 65 places, it's plenty for the limited args the GE mapping will give
     // Start by trimming white space at end of phenotype (if any);
     char phenoString[phenotype.size() + 1];
     strcpy(phenoString, phenotype.c_str());
     // Replace all whitespaces with null characters,
     // and set argv pointers to each arg (word)
     size_t argIndex = 0;
-    argc = 1;
+    //argc = 1;
+    std::vector<char*> newargv;
+    newargv.push_back(argv[0]);
     for(size_t phenoIndex = 0; phenoIndex < phenotype.size(); phenoIndex++){
         if(phenoString[phenoIndex] == ' '){
             phenoString[phenoIndex] = '\0';
@@ -594,16 +592,26 @@ int main(int argc,char **argv)
                 argIndex++;
                 continue;
             }
-            argv[argc] = &(phenoString[argIndex]);
-            argc++;
+            //argv[argc] = &(phenoString[argIndex]);
+            //argc++;
+            newargv.push_back(&(phenoString[argIndex]));
             argIndex = phenoIndex + 1;
         }
+    }
+    // Replace original argv;
+    argc = newargv.size();
+    argv = (char**)malloc((newargv.size()) * sizeof(char*));
+    for(int i = 0; i < argc; i++){
+        argv[i] = newargv[i];
     }
     std::cout << "ARGS (" << argc << "):";
     for(int i = 0; i < argc; i++){
         std::cout << " " << argv[i];
     }
     std::cout << "\n";
+
+    global_argc = &argc;
+    global_argv = argv;
 
     // <- Miguel
 
