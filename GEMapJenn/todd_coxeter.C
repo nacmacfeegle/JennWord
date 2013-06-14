@@ -563,6 +563,8 @@ Graph::Graph(const int *cartan,
 
         //define basic face in group
         Ring basic(1,0);
+        // Miguel ->
+        /*
         int g = 0;
         for (unsigned c=0; true; ++c) {
             g = group.left(g, face[c%face.size()]);
@@ -571,6 +573,16 @@ Graph::Graph(const int *cartan,
                 basic.push_back(g);
             }
         }
+        */
+        int G = 0;
+        for (unsigned c=0; true; ++c) {
+            G = group.left(G, face[c%face.size()]);
+            if (c >= face.size() and G == 0) break;
+            if (in_subgroup.find(G) != in_subgroup.end() and G != basic.back()) {
+                basic.push_back(G);
+            }
+        }
+        // <- Miguel
         for (unsigned c=0; c<basic.size(); ++c) {
             logger.debug() << "  corner: " << basic[c] |0;
         }

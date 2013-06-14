@@ -547,14 +547,17 @@ int main(int argc,char **argv)
     char valid = mapper.mapGE(genotype, phenotype, effectiveSize);
     std::cout << "Phenotype: " << phenotype << "\n";
     std::ofstream outF("fitness.txt");
-    // Save a 0.0 fitness onto the file:
-    // If jenn crashes, this will be the fitness;
-    outF << "0\n";
-    outF.close();
     if(!valid){
+        // Save a 0.0 fitness onto the file, to signal non-mapping;
+        outF << "0.0\n";
+        outF.close();
         std::cout << "Invalid mapping.\n";
         exit(0);
     }
+    // Save a 0.5 fitness onto the file:
+    // If jenn crashes, this will be the fitness;
+    outF << "0.5\n";
+    outF.close();
     phenotype += "  ";
     // Argv does not require resizing (good thing, since that isn't working):
     // with 65 places, it's plenty for the limited args the GE mapping will give
