@@ -57,6 +57,7 @@ char **global_argv;
 #include<vector>
 #include<cassert>
 #include<fstream>
+#include<climits>
 // <- Miguel
 
 const Logging::Logger logger("main", Logging::INFO);
@@ -528,15 +529,34 @@ int main(int argc,char **argv)
 
     GEMap mapper;
     mapper.extractParams(argc, argv);
+    // Fitness file;
+    std::ofstream outF("fitness.txt");
     if(!mapper.readBNFFile(mapper.getGrammarFile(), true)){
+        // Save a 0.0 fitness onto the file, to signal non-mapping;
+        outF << "0.0\n";
+        outF.close();
         exit(0);
     }
     std::vector<size_t>genotype;
+    // If using 64 bits as arguments:
     genotype.resize(16, 0);
     for(int i = 1; i < argc; i++){
         unsigned int v = atoi(argv[i]);
         genotype[(i - 1) / 4] += (v << (3 - (i - 1) % 4));
     }
+    /*
+    // If using long int as argument:
+    genotype.resize(16, 0);
+    long unsigned int longIntArg = atol(argv[1]);
+    int sizeOfLong = sizeof(long unsigned int) * CHAR_BIT;
+    for(int i = 0; i < sizeOfLong; i++){
+        unsigned int bit = longIntArg >> i & 1;
+        std::cout << " " << bit;
+        //genotype[(i - 1) / 4] += (v << (3 - (i - 1) % 4));
+    }
+    std::cout << "\n";
+    exit(0);
+    */
     std::cout << "Genotype:";
     for(int i = 1; i < genotype.size(); i++){
         std::cout << " " << genotype[i];
@@ -546,7 +566,6 @@ int main(int argc,char **argv)
     size_t effectiveSize;
     char valid = mapper.mapGE(genotype, phenotype, effectiveSize);
     std::cout << "Phenotype: " << phenotype << "\n";
-    std::ofstream outF("fitness.txt");
     if(!valid){
         // Save a 0.0 fitness onto the file, to signal non-mapping;
         outF << "0.0\n";
