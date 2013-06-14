@@ -47,13 +47,14 @@ public class Jenn extends Individual {
 	//-------------------------------------------------------------------------
 
 	/**
-	 * Quality is interactively assigned
+	 * Quality is interactively assigned. This method makes a system call to Jenn and waits for fitness to be assigned.
+	 * 
+	 * 
 	 */
 	@Override
 	public void measureQuality() {
 		
 		// TODO
-		// make system call, asking Jenn to store the result at a specific location
 		// wait for file to exist at the location (use timeout and default to score 0 in that case)
 		// once file available, read fitness score and return
 		
@@ -69,6 +70,9 @@ public class Jenn extends Individual {
 			File fitnessFile = new File(workingDir + File.separator + "fitness.txt");
 			String ftnsStr = FileUtils.readFileToString(fitnessFile).trim();
 			quality = Double.parseDouble(ftnsStr);
+		
+			// delete the fitness file
+			FileUtils.deleteQuietly(fitnessFile);
 			
 		} catch (IOException ioe) {
 			quality = 0;
