@@ -60,9 +60,9 @@ public class Jenn extends Individual {
 		
 		DefaultExecutor executor = new DefaultExecutor();
 		String workingDir = executor.getWorkingDirectory().getAbsolutePath() + JENN_DIR;
-		String command = workingDir + File.separator + "fakejenn";
+		String command = workingDir + File.separator + "jenn";
 		CommandLine commandLine = CommandLine.parse(command);
-		commandLine.addArgument(convertGenotype());
+		commandLine.addArgument(new Long(genotype).toString());
 		executor.setWorkingDirectory(new File(workingDir));
 		try {
 			int exitValue = executor.execute(commandLine);
