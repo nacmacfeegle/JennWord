@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
+import org.apache.commons.io.FileUtils;
 
 import world.domain.Domain;
 import world.domain.Individual;
@@ -14,6 +15,8 @@ import world.domain.Individual;
 public class Jenn extends Individual {	
 	
 	public static final String JENN_DIR = File.separator + "GEMapJenn";
+
+	private double cachedFitness = 0;
 	
 	/**
 	 * Constructor.
@@ -27,12 +30,18 @@ public class Jenn extends Individual {
 	//-------------------------------------------------------------------------
 
 	/**
-	 * 
+	 * Derived from the fitness. If the individual doesn't map, it gets a zero value.
+	 * If it maps but crashes Jenn, it gets 0.5. Otherwise it gets a value of 1.
 	 */
 	@Override
 	public void measureTypicality() {
-		// TODO
-		typicality = 0.5;
+		if (cachedFitness == 0) {
+			typicality = 0;
+		} else if (cachedFitness == 0.5) {
+			typicality = 0.5;
+		} else {
+			typicality = 1.0;
+		}
 	}
 	
 	//-------------------------------------------------------------------------
@@ -50,16 +59,23 @@ public class Jenn extends Individual {
 		
 		DefaultExecutor executor = new DefaultExecutor();
 		String workingDir = executor.getWorkingDirectory().getAbsolutePath() + JENN_DIR;
-		String command = workingDir + File.separator + "jenn";
+		String command = workingDir + File.separator + "fakejenn";
 		CommandLine commandLine = CommandLine.parse(command);
 		commandLine.addArgument(convertGenotype());
 		executor.setWorkingDirectory(new File(workingDir));
 		try {
 			int exitValue = executor.execute(commandLine);
+			
+			File fitnessFile = new File(workingDir + File.separator + "fitness.txt");
+			String ftnsStr = FileUtils.readFileToString(fitnessFile).trim();
+			quality = Double.parseDouble(ftnsStr);
+			
 		} catch (IOException ioe) {
 			quality = 0;
 		} 
-		
+	
+		// save last value
+		cachedFitness = quality;
 	}
 
 	/**
@@ -88,5 +104,10 @@ public class Jenn extends Individual {
 	}
 
 	//-------------------------------------------------------------------------
+	public void measure() {
+		// changing the standard order for this subclass since typicality is derived from the quality
+		measureQuality();
+		measureTypicality();
+	}
 
 }
