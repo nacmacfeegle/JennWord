@@ -32,7 +32,7 @@ GL_CYGWIN = -lglut32 -lglu32 -lopengl32
 #png stuff
 ifdef HAVE_PNG
 	PNG_LINUX = -lpng
-	PNG_MAC = -L/opt/local/lib -lpng -lz
+	PNG_MAC = -L/opt/local/lib -L/usr/X11/lib -lpng -lz
 	PNG_CYGWIN = -L/usr/local/lib -lpng -lz
 	USR_CAPT = -DCAPTURE=4
 	DEV_CAPT = -DCAPTURE=24
@@ -46,7 +46,7 @@ endif
 
 #compiler flags
 ifeq ($(COMPILE_TYPE), mac)
-	CPPFLAGS = -I/opt/local/include -DDEBUG_LEVEL=0 -DMAC_HACKS $(USR_CAPT)
+	CPPFLAGS = -I/opt/local/include -I/usr/X11/include -DDEBUG_LEVEL=0 -DMAC_HACKS $(USR_CAPT)
 	CXXFLAGS = $(OPT) -I/opt/local/include
 	LDFLAGS  = $(OPT) -L/opt/local/lib
 	LIBS = $(GL_MAC) $(PNG_MAC)
