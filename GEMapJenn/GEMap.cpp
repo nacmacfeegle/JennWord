@@ -12,6 +12,8 @@
 #include <cassert>
 #include <climits>
 #include <cstdlib>
+#include <cstring>
+#include <unistd.h>
 
 #define DEBUGGING 0
 
