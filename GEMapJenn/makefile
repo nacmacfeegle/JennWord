@@ -103,10 +103,11 @@ projection.o: projection.C projection.h animation.h drawing.h trail.h linalg.h d
 polytopes.o: polytopes.C polytopes.h projection.h animation.h drawing.h definitions.h
 menus.o: menus.C menus.h main.h polytopes.h projection.h animation.h drawing.h definitions.h
 aligned_alloc.o: aligned_alloc.C aligned_alloc.h
+GEMap.o: GEMap.cpp
 
 #final product
-MAIN_O = main.o linalg.o menus.o todd_coxeter.o go_game.o polytopes.o animation.o projection.o drawing.o trail.o aligned_alloc.o definitions.o
-main.o: main.C main.h linalg.h menus.h go_game.h trail.h polytopes.h drawing.h animation.h projection.h definitions.h
+MAIN_O = main.o linalg.o menus.o GEMap.o todd_coxeter.o go_game.o polytopes.o animation.o projection.o drawing.o trail.o aligned_alloc.o definitions.o
+main.o: main.C main.h linalg.h menus.h GEMap.h go_game.h trail.h polytopes.h drawing.h animation.h projection.h definitions.h
 jenn: $(MAIN_O)
 	$(CC) $(CXXFLAGS) -o jenn $(MAIN_O) $(LIBS)
 
