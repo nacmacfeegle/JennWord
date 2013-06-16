@@ -55,7 +55,7 @@ public class World {
 	private void init() {
 		Utils.world = this; // set before constructing Search objects
 
-		// searches.add(new SearchMC());
+		searches.add(new SearchMC());
 		searches.add(new SearchGA());
 	}
 
@@ -65,8 +65,7 @@ public class World {
 	 * Run the experimental trials.
 	 */
 	void generate() {
-		// final int budget = 100000; // number of individuals to measure
-		final int budget = 10; // number of individuals to measure
+		 final int budget = 100000; // number of individuals to measure
 
 		System.out.println("Domain: " + domain.name());
 

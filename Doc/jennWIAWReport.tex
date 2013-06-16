@@ -263,7 +263,15 @@ method. The java code waits for an exit value from the system call and then read
 from the file \texttt{fitness.txt} (created by the C++ code). The typicality value is then 
 derived from the fitness value (as shown in Table \ref{fittyp}).
 
-The source code of the combined Jenn3d+GE mapper must be compiled first. To do
+It is important to note that in addition to the implementation of a new \texttt{domain} 
+package, some minor changes to other code in the framework (to facilitate interactive evolution)
+were also necessary. The superclass \texttt{Search.java} was modified to include a new field, 
+\texttt{userQuit} and the main loops in subclasses \texttt{SearchGA.java} and \texttt{SearchMC.java} 
+were modified to incorporate this value.
+
+An ant buildfile has been supplied to aid with building and executing the code. To do this, call 
+\texttt{ant run} from the JennWord directory. Note that before this can be executed, the 
+C++ source code of the combined Jenn3d+GE mapper must be compiled first. To do
 so, run \texttt{make} (\texttt{make -f makefile.mac} in a Mac environment) in
 the \texttt{GEMapJenn} directory. In a Linux environment, installations of
 the \texttt{libpng} and \texttt{freeglut3} libraries are required, whereas in a Mac 

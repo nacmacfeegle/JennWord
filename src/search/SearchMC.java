@@ -11,7 +11,6 @@ import world.domain.Individual;
  */
 public class SearchMC extends Search {
 	
-	private boolean userQuit = false;
 	/**
 	 * Constructor.
 	 */

@@ -29,7 +29,6 @@ public class SearchGA extends Search {
 	/** Generation count during search. */
 	protected int generation;
 	
-	private boolean userQuit = false;
 
 	// -------------------------------------------------------------------------
 

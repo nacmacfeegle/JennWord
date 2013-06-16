@@ -39,6 +39,9 @@ public abstract class Search
 	/** Random number generator. */
 	protected static Random rng = new Random(System.currentTimeMillis());
 
+	/** Facilitator for interactive -- has the user terminated */
+	protected boolean userQuit = false;
+
 	//-------------------------------------------------------------------------
 		
 	/**

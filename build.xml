@@ -32,9 +32,18 @@
         </javac>
     </target>
     <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
-    <target name="JennTest">
+    <target depends="build" name="JennTest">
         <java classname="world.domain.jenn.JennTest" failonerror="true" fork="yes">
             <classpath refid="JennWord.classpath"/>
         </java>
     </target>
+    <target depends="build" name="run">
+        <java classname="world.World" failonerror="true" fork="yes">
+            <classpath refid="JennWord.classpath"/>
+        </java>
+    </target>
+
+
+
+
 </project>
