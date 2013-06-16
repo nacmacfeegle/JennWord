@@ -4,3 +4,8 @@ out/
 fitness.txt
 *.o
 jenn
+*.aux
+*.bbl
+*.blg
+*.dvi
+*.log
