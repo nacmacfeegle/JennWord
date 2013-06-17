@@ -607,8 +607,9 @@ int main(int argc,char **argv)
     fileToDump = "";
     char dumpAutomatically = 0;
     if(argc > 2){
+	std::cout <<" OK1\n";
         std::string dumpArg(argv[2]);
-	std::cout <<" OK\n";
+	std::cout <<" OK2\n";
         if(dumpArg == "dump" || dumpArg == "yes"){
             std::stringstream fName;
             fName << "0x" << std::hex << longIntArg << ".png";
