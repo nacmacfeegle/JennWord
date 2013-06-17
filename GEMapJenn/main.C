@@ -525,7 +525,6 @@ see notes.text for complete examples of command-line arguments\n";
 
 int main(int argc,char **argv)
 {
-std::cout <<" FFS1\n";
     Logging::title("Jenn. Copyright 2001-2007 Fritz Obermeyer.");
     // Miguel ->
     GEMap mapper;
@@ -551,7 +550,6 @@ std::cout <<" FFS1\n";
     */
     // If using long int as argument:
     genotype.resize(16, 0);
-std::cout <<" FFS2\n";
     long unsigned int longIntArg = strtoul(argv[1], NULL, 0);
     std::cout << "Argument:  " << longIntArg << "\n";
     int sizeOfLong = sizeof(long unsigned int) * CHAR_BIT;
@@ -590,7 +588,6 @@ std::cout <<" FFS2\n";
     // and set argv pointers to each arg (word)
     size_t argIndex = 0;
     //argc = 1;
-std::cout <<" FFS3\n";
     std::vector<char*> newargv;
     newargv.push_back(argv[0]);
     for(size_t phenoIndex = 0; phenoIndex < phenotype.size(); phenoIndex++){
@@ -609,11 +606,8 @@ std::cout <<" FFS3\n";
     // If more than one argument, then signal direct save to file;
     fileToDump = "";
     char dumpAutomatically = 0;
-std::cout <<" FFS4\n";
     if(argc > 2){
-	std::cout <<" OK1\n";
         std::string dumpArg(argv[2]);
-	std::cout <<" OK2\n";
         if(dumpArg == "dump" || dumpArg == "yes"){
             std::stringstream fName;
             fName << "0x" << std::hex << longIntArg << ".png";
