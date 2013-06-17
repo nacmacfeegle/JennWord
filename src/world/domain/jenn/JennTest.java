@@ -8,5 +8,8 @@ public class JennTest {
 		j.measure();
 		System.out.println("Quality: " +j.quality());
 		System.out.println("Typicality: " +j.typicality());
+	
+		String exportedFile = j.export("out");
+		System.out.println("Exported file to location:  "+exportedFile);
 	}
 }

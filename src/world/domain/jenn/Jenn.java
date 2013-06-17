@@ -18,6 +18,10 @@ public class Jenn extends Individual {
 
 	private double cachedFitness = 0;
 	
+	private DefaultExecutor executor;
+	
+	private String workingDir;
+	
 	/**
 	 * Constructor.
 	 * @param domain Domain associated with this individual.
@@ -25,6 +29,8 @@ public class Jenn extends Individual {
 	 */
 	public Jenn(final Domain domain, final long genotype) {
 		super(domain, genotype);
+		executor = new DefaultExecutor();
+		workingDir = executor.getWorkingDirectory().getAbsolutePath() + JENN_DIR;
 	}		
 
 	//-------------------------------------------------------------------------
@@ -47,22 +53,16 @@ public class Jenn extends Individual {
 	//-------------------------------------------------------------------------
 
 	/**
-	 * Quality is interactively assigned. This method makes a system call to Jenn and waits for fitness to be assigned.
-	 * 
-	 * 
+	 * Quality is interactively assigned. This method makes a system call to 
+	 * Jenn and waits for fitness to be assigned.
 	 */
 	@Override
 	public void measureQuality() {
 		
-		// TODO
-		// wait for file to exist at the location (use timeout and default to score 0 in that case)
-		// once file available, read fitness score and return
-		
-		DefaultExecutor executor = new DefaultExecutor();
-		String workingDir = executor.getWorkingDirectory().getAbsolutePath() + JENN_DIR;
 		String command = workingDir + File.separator + "jenn";
 		CommandLine commandLine = CommandLine.parse(command);
 		commandLine.addArgument(new Long(genotype).toString());
+		commandLine.addArgument("yes");
 		executor.setWorkingDirectory(new File(workingDir));
 		try {
 			int exitValue = executor.execute(commandLine);
@@ -100,10 +100,20 @@ public class Jenn extends Individual {
 
 	/**
 	 * Export phenotype to file.
+	 * Files are automatically saved by GEMapJenn to the working directory as 
+	 * <genotype>.png where (where genotype is in hex format)
 	 */
 	@Override
 	public String export(final String path) {
-		final String fileName = path + "TODO" ;
+		String pngFile = String.format("0x%x.png", Long.valueOf(genotype));
+		String srcFile = workingDir + File.separator + pngFile;
+		final String fileName = path + "/" + pngFile;
+		
+		try {
+			FileUtils.copyFile(new File(srcFile), new File(fileName));
+		} catch (IOException e) {
+			System.err.println("Unable to save file");
+		}
 		return fileName;
 	}
 

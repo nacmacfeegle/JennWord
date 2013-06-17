@@ -55,7 +55,7 @@ public class World {
 	private void init() {
 		Utils.world = this; // set before constructing Search objects
 
-		searches.add(new SearchMC());
+		//searches.add(new SearchMC());
 		searches.add(new SearchGA());
 	}
 

@@ -153,11 +153,10 @@ Note that this introduces biases in the exploration of the phenotype space. For
 the \texttt{<FreePolyhedra>} symbol, for example, all productions have a $1/15$
 chance of being chosen, apart from the first production
 (\texttt{<FreePolyhedra> $\rightarrow$ 3 3 2 2 2 2}), which will have a $2/15$
-choice of being selected, due to the fact that each integer has a range of
-$[0,15]$, and GE's usage of the modulus operator to map integers to the choice
-of productions.  GE usually deals with these biases by using large amounts of
-redundancy, through the use of many bits per integer (typically 32 or even 64,
-in systems directly manipulating integers).
+choice of being selected, due to the fact that each integer has a range of $[0,15]$, and GE's usage of the modulus operator to map
+integers to the choice of productions.  GE usually deals with these biases by
+using large amounts of redundancy, through the use of many bits per integer
+(typically 32 or even 64, in systems directly manipulating integers).
 
 Also note that not all $2^{64}$ possible binary strings generate unique
 individuals. Some do not generate valid phenotypes, as the mapping process
@@ -168,15 +167,6 @@ generate shorter mappings, which will not use some of the rightmost bits.
 Even so, the number of possible combinations is still very large, and the
 functionality of each bit can vary, depending on the production choices of the
 bits preceding it.
-
-\subsubsection{Efficient Exploitation}
-
-The original study \cite{nicolau2011a} used a custom GA and extensions in GE,
-to introduce crossover markers through the grammar. This allowed parameter sets
-to be exchanged between individuals, thus increasing the visual relationship
-between parents and offspring. As the search algorithm supplied for the
-competition does not recognise these extensions, the used experience is
-somewhat limited, and the system acts more like an exploration tool.
 
 \subsection{Fitness Evaluation}
 
@@ -277,7 +267,11 @@ implementation of the \textit{Individual} (abstract) class in \texttt{Jenn.java}
 a system call to the C++ framework. This call is made in the \texttt{measureQuality()} 
 method. The java code waits for an exit value from the system call and then reads 
 from the file \texttt{fitness.txt} (created by the C++ code). The typicality value is then 
-derived from the fitness value (as shown in Table \ref{fittyp}).
+derived from the fitness value (as shown in Table \ref{fittyp}). Image generation is 
+performed automatically by the C++ code when the user assigns a fitness score and the generated
+file is stored in the \texttt{GEMapJenn} directory. This simplifies the operation of the
+\texttt{export()} method in \texttt{Jenn.java} since all that is required is a file-copy
+operation.
 
 It is important to note that in addition to the implementation of a new \texttt{domain} 
 package, some minor changes to other code in the framework (to facilitate interactive evolution)
