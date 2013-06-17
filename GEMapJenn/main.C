@@ -607,9 +607,10 @@ int main(int argc,char **argv)
     fileToDump = "";
     char dumpAutomatically = 0;
     if(argc > 2){
-        std::stringstream fName;
         std::string dumpArg(argv[2]);
+	std::cout <<" OK\n";
         if(dumpArg == "dump" || dumpArg == "yes"){
+            std::stringstream fName;
             fName << "0x" << std::hex << longIntArg << ".png";
             fileToDump = fName.str();
             if(dumpArg == "dump") dumpAutomatically = 1;
