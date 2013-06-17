@@ -529,7 +529,7 @@ std::cout <<" FFS1\n";
     Logging::title("Jenn. Copyright 2001-2007 Fritz Obermeyer.");
     // Miguel ->
     GEMap mapper;
-    mapper.extractParams(argc, argv);
+    //mapper.extractParams(argc, argv);
     // Fitness file;
     std::ofstream outF("fitness.txt");
     // Unable to read grammar;
