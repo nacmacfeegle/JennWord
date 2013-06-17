@@ -271,7 +271,8 @@ derived from the fitness value (as shown in Table \ref{fittyp}). Image generatio
 performed automatically by the C++ code when the user assigns a fitness score and the generated
 file is stored in the \texttt{GEMapJenn} directory. This simplifies the operation of the
 \texttt{export()} method in \texttt{Jenn.java} since all that is required is a file-copy
-operation.
+operation. Note that the PNG files from the \texttt{GEMapJenn} folder are not deleted so 
+it may be necessary for the user to clean up these files to save on disk space.
 
 It is important to note that in addition to the implementation of a new \texttt{domain} 
 package, some minor changes to other code in the framework (to facilitate interactive evolution)

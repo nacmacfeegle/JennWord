@@ -18,7 +18,7 @@ public class Jenn extends Individual {
 
 	private double cachedFitness = 0;
 	
-	private DefaultExecutor executor;
+	static DefaultExecutor executor = new DefaultExecutor();
 	
 	private String workingDir;
 	
@@ -29,7 +29,6 @@ public class Jenn extends Individual {
 	 */
 	public Jenn(final Domain domain, final long genotype) {
 		super(domain, genotype);
-		executor = new DefaultExecutor();
 		workingDir = executor.getWorkingDirectory().getAbsolutePath() + JENN_DIR;
 	}		
 
