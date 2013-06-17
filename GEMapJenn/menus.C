@@ -348,7 +348,7 @@ void CaptureMenu::open ()
 void capture (int Nwide, int Nhigh)
 {
     beg_pause(false);
-    projector->capture(Nwide, Nhigh);
+    projector->capture(Nwide, Nhigh, fileToDump);
     end_pause();
 }
 void CaptureMenu::_call (int N)
@@ -365,8 +365,8 @@ void CaptureMenu::_call (int N)
 
     //draw waiting dialog
     const char* message = projector->get_quality()
-        ? "saving high-quality image to:\n    jenn_capture.png\n(this may take a while)"
-        : "saving low-quality image to:\n    jenn_capture.png";
+        ? "saving high-quality image"
+        : "saving low-quality image";
     Menu* dialog = new Menu(message, Helv18, 0.5, 0.5, false);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     finish_buffer();
@@ -1059,6 +1059,10 @@ void saveScore(double score){
 	std::ofstream outF("fitness.txt");
 	outF << score << "\n";
 	outF.close();
+        if(fileToDump.size()){
+            if(!projector->get_quality()) projector->toggle_quality();
+            projector->capture(4, 4, fileToDump);
+        }
 }
 
 void saveParams(int *argc, char **argv){

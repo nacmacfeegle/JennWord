@@ -58,6 +58,8 @@ char **global_argv;
 #include<cassert>
 #include<fstream>
 #include<climits>
+#include<sstream>
+std::string fileToDump;
 // <- Miguel
 
 const Logging::Logger logger("main", Logging::INFO);
@@ -362,7 +364,7 @@ public:
                  int init_width=800, int init_height=600,
                  // Miguel ->
                  //bool show_start_msg=true);
-                 bool show_start_msg=true, std::string _fileToDump="", int zoomLevel=0);
+                 bool show_start_msg=true, std::string _fileToDump="", int zoomLevel=0, char dumpAutomatically=0);
                  // <- Miguel
 
     static void init_callbacks ();
@@ -375,7 +377,7 @@ GlutManager::GlutManager (int *argc, char **argv,
                           int init_width, int init_height,
                           // Miguel ->
                           //bool show_start_msg)
-                          bool show_start_msg, std::string fileToDump, int zoomLevel)
+                          bool show_start_msg, std::string fileToDump, int zoomLevel, char dumpAutomatically)
                           // <- Miguel
 {
     //define main window
@@ -412,9 +414,10 @@ GlutManager::GlutManager (int *argc, char **argv,
         projector->zoom(ZOOM_OUT);
       }
     }
-    if(fileToDump.size()){
+    if(fileToDump.size() && dumpAutomatically){
       beg_pause(true);
-      projector->capture(1, 1, fileToDump);
+      if(!projector->get_quality()) projector->toggle_quality();
+      projector->capture(4, 4, fileToDump);
       exit(0);
     }
     // <- Miguel
@@ -528,7 +531,9 @@ int main(int argc,char **argv)
     mapper.extractParams(argc, argv);
     // Fitness file;
     std::ofstream outF("fitness.txt");
+    // Unable to read grammar;
     if(!mapper.readBNFFile(mapper.getGrammarFile(), true)){
+        std::cerr << "Cannot find grammar.bnf in current directory.\nExecution aborted.\n";
         // Save a 0.0 fitness onto the file, to signal non-mapping;
         outF << "0.0\n";
         outF.close();
@@ -598,6 +603,18 @@ int main(int argc,char **argv)
             argIndex = phenoIndex + 1;
         }
     }
+    // If more than one argument, then signal direct save to file;
+    fileToDump = "";
+    char dumpAutomatically = 0;
+    if(argc > 2){
+        std::stringstream fName;
+        std::string dumpArg(argv[2]);
+        if(dumpArg == "dump" || dumpArg == "yes"){
+            fName << "0x" << std::hex << longIntArg << ".png";
+            fileToDump = fName.str();
+            if(dumpArg == "dump") dumpAutomatically = 1;
+        }
+    }
     // Replace original argv;
     argc = newargv.size();
     argv = (char**)malloc((newargv.size()) * sizeof(char*));
@@ -643,7 +660,6 @@ int main(int argc,char **argv)
     int width = 800, height = 600;
 
     // Miguel ->
-    std::string fileToDump = "";
     int zoomLevel = 0;
     // <- Miguel
 
@@ -763,7 +779,7 @@ int main(int argc,char **argv)
 
     // Miguel ->
     //gl_manager = new GlutManager(&argc, argv, width, height, argc<=1);
-    gl_manager = new GlutManager(&argc, argv, width, height, argc<=1, fileToDump, zoomLevel);
+    gl_manager = new GlutManager(&argc, argv, width, height, argc<=1, fileToDump, zoomLevel, dumpAutomatically);
     // <- Miguel
     delete gl_manager;
 

@@ -38,5 +38,8 @@ void end_pause ();
 void beg_pause (bool redraw = true);
 void toggle_pause ();
 
+// Miguel
+extern std::string fileToDump;
+
 #endif
 

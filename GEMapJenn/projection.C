@@ -364,7 +364,7 @@ void Projector::capture (unsigned Nwide, unsigned Nhigh, std::string fileToDump)
 
     //calculate geometry
     logger.debug() << "geometry: " << w_tot << " x " << h_tot << " pixels" |0;
-    Assert (paused, "must be paused to shoot");
+    //Assert (paused, "must be paused to shoot");
     float scale_factor = 1.0f / max(Nwide, Nhigh);
     zoom(scale_factor);
     float x_center_tot = x_center;

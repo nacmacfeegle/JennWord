@@ -32,13 +32,14 @@ to which the 64 bits are used.
 
 This entry uses the 64 bits as a basis to create an integer string, which in
 turn is used with the Grammatical Evolution system \cite{oneill03b}, to
-evolve parameters for Jenn3d \cite{obermeyer10a}, a visualiser of ayley graphs of
+evolve parameters for Jenn3d \cite{obermeyer10a}, a visualiser of Cayley graphs of
 finite Coxeter groups. The mapping process is regulated through a context-free
 grammar, which defines the parameter space to navigate.
 
 The resulting system creates fully-formed images from the start, and adapts
-quickly to the changing styling preferences of the user. The results obtained
-are unique, and have won several awards.
+quickly to the changing styling preferences of the user. The use of 64 bits
+limits the range of visualisations achievable, but still allows for an
+extensive exploration of the domain.
 
 This document describes the approach taken. Section \ref{methodology} describes
 the methodology used, \ldots FIXME
@@ -139,10 +140,10 @@ all other parameters are not only optional, but also variable in size.
 \subsection{Encoding}
 
 64 bit binary strings are evolved using a simple Genetic Algorithm
-(\cite{holland75}. These are then transformed into integer strings. As each of
+\cite{holland75}. These are then transformed into integer strings. As each of
 these integers is used to choose productions associated to a
-\textit{non-terminal} symbol defined in the grammar, the number of bits used to
-represent each integer is dependent on the grammar used. An analysis of the
+\textit{non-terminal} symbol defined in the grammar, the number of bits required to
+represent each integer is dependent on that grammar. An analysis of the
 grammar used (Fig.~\ref{grammar}) shows that the symbol with the highest number
 of associated productions is \texttt{<FreePolyhedra>}, with 15 productions;
 therefore a minimum of 4 bits are required to encode each integer. This first
@@ -152,7 +153,7 @@ Note that this introduces biases in the exploration of the phenotype space. For
 the \texttt{<FreePolyhedra>} symbol, for example, all productions have a $1/15$
 chance of being chosen, apart from the first production
 (\texttt{<FreePolyhedra> $\rightarrow$ 3 3 2 2 2 2}), which will have a $2/15$
-choice of being selected, due to GE's usage of the modulus operator to map
+choice of being selected, due to the fact that each integer has a range of $[0,15]$, and GE's usage of the modulus operator to map
 integers to the choice of productions.  GE usually deals with these biases by
 using large amounts of redundancy, through the use of many bits per integer
 (typically 32 or even 64, in systems directly manipulating integers).
@@ -201,7 +202,7 @@ of the current visualisation.
 
 Table \ref{fittyp} shows the range of possible fitness and typicality scores.
 Due to the complexity of the Todd-Coxeter algorithm, some visualisations are
-impossible to generate, causing the Jenn3d software to crash \footnote{This can
+impossible to generate, causing the Jenn3d software to crash\footnote{This can
 be frustrating for the user; a quick way to deal with this problem (in a Mac
 environment) is to leave the crash report window open, as new crash reports
 will not be generated.}; as these might be close to correct (and potentially
@@ -237,10 +238,10 @@ automatically attributed.
 
 Ideally, the user has a large control of the evolutionary process, through the
 fitness score. A fitness score of $1.0$, for example, guarantees that the
-current visualisation is replaced by a random one the next generation, whereas
-a score of $5.0$ guarantees that the visualisation is passed unchanged to the
-next generation, thus potentially being used as a seed for alternative, similar
-visualisations (as per the scoring process proposed previously
+current visualisation is replaced by a random one in the next generation,
+whereas a score of $5.0$ guarantees that the visualisation is passed unchanged
+to the next generation, thus potentially being used as a seed for alternative,
+similar visualisations (as per the scoring process proposed previously
 \cite{nicolau2011a}).
 
 The GA provided in the Java framework of the competition does not comply with
@@ -249,6 +250,11 @@ system.
 
 \section{Examples}
 FIXME
+
+FIXME: Mention that automatic export limits the user creativity, as a default
+viewpoint is saved automatically to file. To really exploit the visual
+complexity of the generated structures, user-selected viewpoints are much
+nicer.
 
 \bibliographystyle{plain}
 \bibliography{jennWIAWReport}

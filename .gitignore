@@ -9,3 +9,5 @@ jenn
 *.blg
 *.dvi
 *.log
+.*.swp
+
