@@ -276,8 +276,15 @@ derived from the fitness value (as shown in Table \ref{fittyp}). Image generatio
 performed automatically by the C++ code when the user assigns a fitness score and the generated
 file is stored in the \texttt{GEMapJenn} directory. This simplifies the operation of the
 \texttt{export()} method in \texttt{Jenn.java} since all that is required is a file-copy
-operation. Note that the PNG files from the \texttt{GEMapJenn} folder are not deleted so 
-it may be necessary for the user to clean up these files to save on disk space.
+operation. The PNG files from the \texttt{GEMapJenn} folder are (deliberately) not deleted so 
+that the user may still wish to peruse discarded individuals that never made it to the final population.
+Hoever, considering that each exported individual could take approximately 1MB of disk space, it 
+may be necessary for the user to clean up these files after prolonged use of the system.
+
+Inside the \texttt{GEMapJenn} implementation, a design decision was made to export the viewpoint of
+the invidiual at the point of fitness allocation (for example after the user has had a chance to 
+explore the image via zooming, rotating or panning) as opposed to the default state of the freshly
+initialised individual.
 
 It is important to note that in addition to the implementation of a new \texttt{domain} 
 package, some minor changes to other code in the framework (to facilitate interactive evolution)
@@ -294,13 +301,17 @@ the \texttt{libpng} and \texttt{freeglut3} libraries are required, whereas in a 
 a recent installation of XCode is required (the software has not been tested in a 
 Windows environment).
 
-FIXME: Mention that automatic export limits the user creativity, as a default
-viewpoint is saved automatically to file. To really exploit the visual
-complexity of the generated structures, user-selected viewpoints are much
-nicer.
+When the user executes \texttt{ant run}, the framework class \texttt{World} is run. In the original 
+framework version, this class called out to \texttt{SearchMC} and \texttt{SearchGA}, running MonteCarlo
+and Genetic Algorithm searches respectively. In the version provided here, the \texttt{SearchMC} code
+has been commented out, so the default execution launches straight into a GA. The reason for doing this
+is to showcase the beauty and complexity of the GA-generated images from the very outset. Images produced
+by the \texttt{SearchMC} code tend to be very similar to each other, or the genotypes fail to produce valid 
+mappings at all. Considering that this is an interactive system, it is important to resist the (almost 
+inevitable) onset of user-fatigue by all means necessary. To re-enable the \texttt{SearchMC} functionality,
+it will be neccessary to uncomment the code in the \texttt{init()} method of the \texttt{World} class.
 
-FIXME: Dan please spare a few words for us mortal people to explain how you
-commented out the MC poxy stuff.
+
 
 \end{document}
 
