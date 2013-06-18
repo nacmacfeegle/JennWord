@@ -17,10 +17,10 @@ University College Dublin}
 \begin{document}
 \maketitle
 \begin{abstract}
-A 64-bit string evolved with a custom-built GA is mapped using the Grammatical
-Evolution system, to evolve parameters for a visualiser of Cayley graphs.The
-resulting visualisations, albeit restricted, still exhibit a large degree of
-complexibility and evolvability, and are representative of the domain.
+A 64-bit string is mapped using the Grammatical Evolution system, to evolve
+parameters for a visualiser of Cayley graphs.The resulting visualisations,
+albeit restricted, still exhibit a large degree of complexibility and
+evolvability, and are representative of the domain.
 \end{abstract}
 
 \section{Introduction}
@@ -37,16 +37,16 @@ evolve parameters for Jenn3d \cite{obermeyer10a}, a visualiser of Cayley graphs 
 finite Coxeter groups. The mapping process is regulated through a context-free
 grammar, which defines the parameter space to navigate.
 
-The resulting system creates fully-formed images from the start, and adapts
-quickly to the changing styling preferences of the user. The use of 64 bits
-limits the range of visualisations achievable, but still allows for an
-extensive exploration of the domain.
+The resulting system creates fully-formed images from the start, and adapts to
+the changing styling preferences of the user. The use of 64 bits limits the
+range of visualisations achievable, but still allows for an extensive
+exploration of the domain.
 
 This document describes the approach taken. Section \ref{methodology} describes
 the methodology used, including overviews of the Jenn3d software, the
 evolutionary approach, the encoding used, and the fitness evaluation; Section
-\ref{examples} provides some examples generated. Appendix A provides details of
-the software implementation, and finally Appendix B provides highres
+\ref{examples} exhibits some examples generated. Appendix A provides details of
+the software implementation, and finally Appendix B provides high resolution
 visualisations of the examples from Section \ref{examples}.
 
 \section{Methodology}
@@ -161,22 +161,23 @@ Note that this introduces biases in the exploration of the phenotype space. For
 the \texttt{<FreePolyhedra>} symbol, for example, all productions have a $1/15$
 chance of being chosen, apart from the first production
 (\texttt{<FreePolyhedra> $\rightarrow$ 3 3 2 2 2 2}), which will have a $2/15$
-choice of being selected, due to the fact that each integer has a range of
+choice of being selected; this is due to the fact that each integer has a range of
 $[0,15]$, and GE's usage of the modulus operator to map integers to the choice
 of productions.  GE usually deals with these biases by using large amounts of
 redundancy, through the use of many bits per integer (typically 32 or even 64,
 in systems directly manipulating integers).
 
 Also note that not all $2^{64}$ possible binary strings generate unique
-individuals. Some do not generate valid phenotypes, as the mapping process
-might not terminate; others generate the same choices in the grammar, and hence
-the same phenotypes; and finally some combinations of the leftmost bits will
-generate shorter mappings, which will not use some of the rightmost bits.
+individuals. Some do not generate valid phenotypes at all, as the mapping
+process might not terminate; others generate the same choices in the grammar,
+and hence the same phenotypes; and finally some combinations of the leftmost
+bits will generate shorter mappings, which will not use some of the rightmost
+bits.
 
 Even so, the number of possible combinations is still very large, and the
 functionality of each bit can vary, depending on the production choices of the
 bits preceding it. Furthermore, from a visualisation point of view, the search
-space is potentially unique, as the user can select from a multitude of
+space is potentially infinite, as the user can select from a multitude of
 rotation and zoom combinations for each visualisation.
 
 \subsubsection{Efficient Exploitation}
@@ -194,7 +195,7 @@ incompatible with the representation used, as deep searches (i.e.~explorations
 of the rightmost bits in the bit string) can potentially always generate the
 same visualisation; this is particularly true for bit strings where the mapping
 process does not use the whole genotype string. As such, the MC algorithm was
-not used; more details are provided in Appendix B.
+not used; more details are provided in Appendix A.
 
 \subsection{Fitness Evaluation}
 
@@ -231,7 +232,7 @@ of the current visualisation.
 Table \ref{fittyp} shows the range of possible fitness and typicality scores.
 Due to the complexity of the Todd-Coxeter algorithm, some visualisations are
 impossible to generate, causing the Jenn3d software to crash\footnote{This can
-be frustrating for the user; a quick way to deal with this problem (in a Mac
+be frustrating for the user; a smart way to deal with this problem (in a Mac
 environment) is to leave the crash report window open, as only a single such
 window can be open at any given time.}; as these might be close to correct (and
 potentially attractive) visualisations, fitness and typicality scores of $0.5$
@@ -272,7 +273,7 @@ to the next generation, thus potentially being used as a seed for alternative,
 similar visualisations (as per the scoring process proposed previously
 \cite{nicolau2011a}).
 The GA provided in the Java framework of the competition does not comply with
-this scoring system, which limits to a small extent the user experience of the
+this scoring system, which limits to some extent the user experience of the
 system.
 
 \section{Examples}
@@ -366,7 +367,7 @@ file is stored in the \texttt{GEMapJenn} directory. This simplifies the operatio
 \texttt{export()} method in \texttt{Jenn.java} since all that is required is a file-copy
 operation. The PNG files from the \texttt{GEMapJenn} folder are (deliberately) not deleted so 
 that the user may still wish to peruse discarded individuals that never made it to the final population.
-Hoever, considering that each exported individual could take approximately 1MB of disk space, it 
+However, considering that each exported individual could take approximately 1MB of disk space, it 
 may be necessary for the user to clean up these files after prolonged use of the system.
 
 Inside the \texttt{GEMapJenn} implementation, a design decision was made to export the viewpoint of
