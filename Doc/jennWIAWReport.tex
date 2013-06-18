@@ -1,6 +1,7 @@
 \documentclass{article}
 
 \usepackage{graphicx}
+\usepackage{multirow}
 
 \title{World In A Word 2013 Competition:\\
 Evolving Parameters for a Cayley Graph Visualiser Using 64 bits}
@@ -23,12 +24,12 @@ complexibility and evolvability, and are representative of the domain.
 \end{abstract}
 
 \section{Introduction}
-The ``World in a Word'' 64-Bit Design Challenge is a competition run for the
-IEEE Congress on Evolutionary Computation. The objective is to evolve 64-bit
-strings, which are used to explore creative domains. Entries are evaluated
-based on the originality of the domain, the diversity of the structures
-evolved, the appeal of the domain and the evolved individuals, and the extent
-to which the 64 bits are used.
+The ``World in a Word'' 64-Bit Design Challenge \cite{browne2013a} is a
+competition run for the IEEE Congress on Evolutionary Computation. The
+objective is to evolve 64-bit strings, which are used to explore creative
+domains. Entries are evaluated based on the originality of the domain, the
+diversity of the structures evolved, the appeal of the domain and the evolved
+individuals, and the extent to which the 64 bits are used.
 
 This entry uses the 64 bits as a basis to create an integer string, which in
 turn is used with the Grammatical Evolution system \cite{oneill03b}, to
@@ -42,7 +43,11 @@ limits the range of visualisations achievable, but still allows for an
 extensive exploration of the domain.
 
 This document describes the approach taken. Section \ref{methodology} describes
-the methodology used, \ldots FIXME
+the methodology used, including overviews of the Jenn3d software, the
+evolutionary approach, the encoding used, and the fitness evaluation; Section
+\ref{examples} provides some examples generated. Appendix A provides details of
+the software implementation, and finally Appendix B provides highres
+visualisations of the examples from Section \ref{examples}.
 
 \section{Methodology}
 \label{methodology}
@@ -61,14 +66,17 @@ as a 2D picture. Jenn3d renders using OpenGL, and is fast enough to allow the
 user to rotate and navigate in curved 3D space, and gain an intuition for the
 geometry of the 3-sphere.
 
-The rich and complex domain of visualisations representable through Jenn3d is defined by the following parameters:
+The rich and complex domain of visualisations representable through Jenn3d is
+defined by the following parameters:
 \begin{enumerate}
-\item the $4\times 4$ Coxeter matrix, as specified by the 6 integers in the upper triangle matrix;
-\item a subset of up to 3 of the 4 generators, by which vertices should be fixed
-  (the larger the subset, the fewer vertices in the quotient);
+\item the $4\times 4$ Coxeter matrix, as specified by the 6 integers in the
+upper triangle matrix;
+\item a subset of up to 3 of the 4 generators, by which vertices should be
+fixed (the larger the subset, the fewer vertices in the quotient);
 \item a list of group elements to define edges,
-  where each element is written as a string in the generating set; and
-\item a list of faces, where each face is written as a pair of generating elements.
+where each element is written as a string in the generating set; and
+\item a list of faces, where each face is written as a pair of generating
+elements.
 \end{enumerate}
 Note that this parameter set is partial and redundant in that
 \emph{(i)} most Coxeter matrices result in an infinite group
@@ -88,11 +96,11 @@ Evolution.
 \subsection{Evolutionary Approach}
 
 To explore the Jenn3d parameter space, Grammatical Evolution (GE)
-\cite{oneill03b} was used. GE typically uses a variable-sized binary or decimal
-string, to choose productions from a given grammar, and thus generate
-syntactically correct solutions of the search space. A fixed-length string can
-also be used; however, the search space becomes finite and (somewhat)
-restricted.
+\cite{oneill03b} was used. GE typically uses a variable-length Genetic
+Algorithm (GA) \cite{holland75} to create binary or decimal strings, which
+choose productions from a given grammar, and thus generate syntactically
+correct solutions of the search space. A fixed-length string can also be used;
+however, the search space becomes finite and (somewhat) restricted.
 
 Fig.~\ref{grammar} shows the grammar used. In it both the required and optional
 parameters for Jenn3d are specified. The Coxeter matrix parameter is drawn from
@@ -139,15 +147,15 @@ all other parameters are not only optional, but also variable in size.
 
 \subsection{Encoding}
 
-64 bit binary strings are evolved using a simple Genetic Algorithm
-\cite{holland75}. These are then transformed into integer strings. As each of
+64 bit binary strings are evolved using the search algorithm provided for the competition \cite{browne2013a}.
+These are then transformed into integer strings. As each of
 these integers is used to choose productions associated to a
 \textit{non-terminal} symbol defined in the grammar, the number of bits required to
 represent each integer is dependent on that grammar. An analysis of the
 grammar used (Fig.~\ref{grammar}) shows that the symbol with the highest number
 of associated productions is \texttt{<FreePolyhedra>}, with 15 productions;
-therefore a minimum of 4 bits are required to encode each integer. This first
-mapping process thus transforms the 64 bit strings into 16 integer strings.
+therefore a minimum of 4 bits are required to encode each integer. The 64 bit
+strings are thus transformed into 16 integer strings.
 
 Note that this introduces biases in the exploration of the phenotype space. For
 the \texttt{<FreePolyhedra>} symbol, for example, all productions have a $1/15$
@@ -167,7 +175,9 @@ generate shorter mappings, which will not use some of the rightmost bits.
 
 Even so, the number of possible combinations is still very large, and the
 functionality of each bit can vary, depending on the production choices of the
-bits preceding it.
+bits preceding it. Furthermore, from a visualisation point of view, the search
+space is potentially unique, as the user can select from a multitude of
+rotation and zoom combinations for each visualisation.
 
 \subsubsection{Efficient Exploitation}
 
@@ -175,8 +185,16 @@ The original study \cite{nicolau2011a} used a custom GA and extensions in GE,
 to introduce crossover markers through the grammar. This allowed parameter sets
 to be exchanged between individuals, thus increasing the visual relationship
 between parents and offspring. As the search algorithm supplied for the
-competition does not recognise these extensions, the used experience is
+competition does not recognise these extensions, the user experience is
 somewhat limited, and the system acts more like an exploration tool.
+
+Also note that the provided Java framework \cite{browne2013a} also uses a
+Monte-Carlo (MC) algorithm \cite{sutton98a} as a search procedure. This however is
+incompatible with the representation used, as deep searches (i.e.~explorations
+of the rightmost bits in the bit string) can potentially always generate the
+same visualisation; this is particularly true for bit strings where the mapping
+process does not use the whole genotype string. As such, the MC algorithm was
+not used; more details are provided in Appendix B.
 
 \subsection{Fitness Evaluation}
 
@@ -214,13 +232,13 @@ Table \ref{fittyp} shows the range of possible fitness and typicality scores.
 Due to the complexity of the Todd-Coxeter algorithm, some visualisations are
 impossible to generate, causing the Jenn3d software to crash\footnote{This can
 be frustrating for the user; a quick way to deal with this problem (in a Mac
-environment) is to leave the crash report window open, as new crash reports
-will not be generated.}; as these might be close to correct (and potentially
-attractive) visualisations, fitness and typicality scores of $0.5$ are
-automatically attributed.
+environment) is to leave the crash report window open, as only a single such
+window can be open at any given time.}; as these might be close to correct (and
+potentially attractive) visualisations, fitness and typicality scores of $0.5$
+are automatically attributed.
 
 \begin{center}
-	\begin{table}
+	\begin{table}[th]
 	\caption{Fitness and Typicality scores, and events generating those
 	scores; fitness values 1-5 are user supplied}
 	\begin{tabular}{|l|c|c|}
@@ -253,13 +271,83 @@ whereas a score of $5.0$ guarantees that the visualisation is passed unchanged
 to the next generation, thus potentially being used as a seed for alternative,
 similar visualisations (as per the scoring process proposed previously
 \cite{nicolau2011a}).
-
 The GA provided in the Java framework of the competition does not comply with
 this scoring system, which limits to a small extent the user experience of the
 system.
 
 \section{Examples}
-FIXME
+\label{examples}
+
+Table  \ref{projparams} shows example projections, achieved through evolution,
+along with their hexadecimal, integer and mapped strings. The specific
+visualisations were chosen to the taste of the authors. Higher resolution
+images are shown in Appendix B, Fig.~\ref{projections}.
+
+\begin{center}
+	\begin{table}[h!!t]
+	\caption{Parameters evolved for the examples shown in Fig.~\ref{projections}}
+	\begin{tabular}{|l|l|}
+		\hline
+		\multirow{5}{*}{\includegraphics[width = .12\textwidth]{0x9134db20eb2d6f07.png}}
+		& \\
+		& \texttt{Hex:\ \ \ \ \ \ \ 0x9134db20eb2d6f07}\\
+		& \texttt{Genotype:\ \ 9 1 3 4 13 11 2 0 14 11 2 13 6 15 0 7}\\
+		& \texttt{Phenotype:\ '-c 3 2 2 2 2 5  -e 0 0123 -f 23'}\\
+		& \\
+		\hline
+		\multirow{5}{*}{\includegraphics[width = .12\textwidth]{0x53090ffede18f1b8.png}}
+		& \\
+		& \texttt{Hex:\ \ \ \ \ \ \ 0x53090ffede18f1b8}\\
+		& \texttt{Genotype:\ \ 5 3 0 9 0 15 15 14 13 14 1 8 15 1 11 8}\\
+		& \texttt{Phenotype:\ '-c 3 3 2 2 5 2  -e 0 -f 21'}\\
+		& \\
+		\hline
+		\multirow{5}{*}{\includegraphics[width = .12\textwidth]{0xc3298ff8d8003028.png}}
+		& \\
+		& \texttt{Hex:\ \ \ \ \ \ \ 0xc3298ff8d8003028}\\
+		& \texttt{Genotype:\ \ 12 3 2 9 8 15 15 8 13 8 0 0 3 0 2 8}\\
+		& \texttt{Phenotype:\ '-c 5 2 2 2 2 4 -v 13 -e 123 13'}\\
+		& \\
+		\hline
+		\multirow{5}{*}{\includegraphics[width = .12\textwidth]{0xc3090fe89c10f098.png}}
+		& \\
+		& \texttt{Hex:\ \ \ \ \ \ \ 0xc3090fe89c10f098}\\
+		& \texttt{Genotype:\ \ 12 3 0 9 0 15 14 8 9 12 1 0 15 0 9 8}\\
+		& \texttt{Phenotype:\ '-c 5 2 2 2 2 2 -v 0 -e 13 -f 03'}\\
+		& \\
+		\hline
+		\multirow{5}{*}{\includegraphics[width = .12\textwidth]{0xdb410f50dc59f1ba.png}}
+		& \\
+		& \texttt{Hex:\ \ \ \ \ \ \ 0xdb410f50dc59f1ba}\\
+		& \texttt{Genotype:\ \ 13 11 4 1 0 15 5 0 13 12 5 9 15 1 11 10}\\
+		& \texttt{Phenotype:\ '-c 2 2 2 2 3 4  -e 0 -f 01 -w 4 2 12 11'}\\
+		& \\
+		\hline
+		\multirow{5}{*}{\includegraphics[width = .12\textwidth]{0xd1410f70dc59f0ac.png}}
+		& \\
+		& \texttt{Hex:\ \ \ \ \ \ \ 0xd1410f70dc59f0ac}\\
+		& \texttt{Genotype:\ \ 13 1 4 1 0 15 7 0 13 12 5 9 15 0 10 12}\\
+		& \texttt{Phenotype:\ '-c 3 4 2 2 2 2  -e 0 -f 01 -w 4 1 11 1'}\\
+		& \\
+		\hline
+		\multirow{5}{*}{\includegraphics[width = .12\textwidth]{0xdb400f50dc50f13a.png}}
+		& \\
+		& \texttt{Hex:\ \ \ \ \ \ \ 0xdb400f50dc50f13a}\\
+		& \texttt{Genotype:\ \ 13 11 4 0 0 15 5 0 13 12 5 0 15 1 3 10}\\
+		& \texttt{Phenotype:\ '-c 2 2 2 2 3 4 -w 6 1 2 1'}\\
+		& \\
+		\hline
+		\multirow{5}{*}{\includegraphics[width = .12\textwidth]{0xd2410ef0d859f4be.png}}
+		& \\
+		& \texttt{Hex:\ \ \ \ \ \ \ 0xd2410ef0d859f4be}\\
+		& \texttt{Genotype:\ \ 13 2 4 1 0 14 15 0 13 8 5 9 15 4 11 14}\\
+		& \texttt{Phenotype:\ '-c 3 5 2 2 2 2  -e 0123 -f 01 -w 4 5 12 3'}\\
+		& \\
+		\hline
+	\end{tabular}
+	\label{projparams}
+	\end{table}
+\end{center}
 
 \bibliographystyle{plain}
 \bibliography{jennWIAWReport}
@@ -311,7 +399,25 @@ mappings at all. Considering that this is an interactive system, it is important
 inevitable) onset of user-fatigue by all means necessary. To re-enable the \texttt{SearchMC} functionality,
 it will be neccessary to uncomment the code in the \texttt{init()} method of the \texttt{World} class.
 
-
+\section*{Appendix B: Example Individuals}
+\vspace{-2mm}
+\begin{figure}[h!!t]
+	\begin{center}
+		\includegraphics[width = .45\textwidth]{0x9134db20eb2d6f07.png}
+		\includegraphics[width = .45\textwidth]{0x53090ffede18f1b8.png}\\
+		\vspace{2mm}
+		\includegraphics[width = .45\textwidth]{0xc3298ff8d8003028.png}
+		\includegraphics[width = .45\textwidth]{0xc3090fe89c10f098.png}\\
+		\vspace{2mm}
+		\includegraphics[width = .45\textwidth]{0xdb410f50dc59f1ba.png}
+		\includegraphics[width = .45\textwidth]{0xd1410f70dc59f0ac.png}
+		\vspace{2mm}
+		\includegraphics[width = .45\textwidth]{0xdb400f50dc50f13a.png}
+		\includegraphics[width = .45\textwidth]{0xd2410ef0d859f4be.png}
+	\end{center}
+	\caption{Mapping examples.}
+	\label{projections}
+\end{figure}
 
 \end{document}
 
