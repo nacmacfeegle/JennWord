@@ -9,6 +9,6 @@ jenn
 *.blg
 *.dvi
 *.log
-*.png
+GEMapJenn/*.png
 .*.swp
 
